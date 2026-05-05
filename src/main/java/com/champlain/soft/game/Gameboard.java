@@ -55,8 +55,14 @@ public class Gameboard extends Application {
 
         BorderPane root = new BorderPane();
         root.setCenter(grid);
+        
+        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
 
-
+        stage.setTitle("Rescue the Princess");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
 
 
 
@@ -142,6 +148,23 @@ public class Gameboard extends Application {
         iv.setFitHeight(CELL_SIZE);
         iv.setPreserveRatio(true);
         return iv;
+    }
+
+    private void handleKey(KeyEvent e){
+        int newRow = playerRow;
+        int newCol = playerCol;
+
+        switch (e.getCode()){
+            case UP -> newRow--;
+            case DOWN -> newRow++;
+            case LEFT -> newCol--;
+            case RIGHT -> newCol++;
+            default -> {return;}
+        }
+
+        if (matrix[newRow][newCol] == CellType.WALL) return;
+
+        CellType destination = matrix[newRow][newCol];
     }
 
     public static void main(String[] args) {
