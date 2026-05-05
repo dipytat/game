@@ -180,6 +180,16 @@ public class Gameboard extends Application {
         }
    }
 
+   private void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Rescue the Princess");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+        resetGame();
+   }
+
+
 
 
     public static void main(String[] args) {
