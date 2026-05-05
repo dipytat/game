@@ -150,7 +150,7 @@ public class Gameboard extends Application {
         return iv;
     }
 
-    private void handleKey(KeyEvent e){
+   private void handleKey(KeyEvent e){
         int newRow = playerRow;
         int newCol = playerCol;
 
