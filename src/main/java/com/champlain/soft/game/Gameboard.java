@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Alert;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.Random;
