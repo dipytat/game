@@ -189,8 +189,12 @@ public class Gameboard extends Application {
         resetGame();
    }
 
-
-
+   private void resetGame(){
+        playerRow = 1;
+        playerCol = 1;
+        initMatrix();
+        drawBoard(grid);
+   }
 
     public static void main(String[] args) {
         launch(args);
