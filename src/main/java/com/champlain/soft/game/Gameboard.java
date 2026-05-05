@@ -172,7 +172,15 @@ public class Gameboard extends Application {
         matrix[playerRow][playerCol] = CellType.PLAYER;
 
         drawBoard(grid);
-    }
+
+        if (destination == CellType.PRINCESS){
+            showAlert("You rescued the princess! You win.");
+        } else if (destination == CellType.BOMB) {
+            showAlert("You hit the bomb. Game over.");
+        }
+   }
+
+
 
     public static void main(String[] args) {
         launch(args);
