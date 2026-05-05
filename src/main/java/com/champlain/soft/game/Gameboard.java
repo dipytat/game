@@ -165,6 +165,13 @@ public class Gameboard extends Application {
         if (matrix[newRow][newCol] == CellType.WALL) return;
 
         CellType destination = matrix[newRow][newCol];
+
+        matrix[playerRow][playerCol] = CellType.GRASS;
+        playerRow = newRow;
+        playerCol = newCol;
+        matrix[playerRow][playerCol] = CellType.PLAYER;
+
+        drawBoard(grid);
     }
 
     public static void main(String[] args) {
