@@ -57,8 +57,9 @@ public class Gameboard extends Application {
 
         BorderPane root = new BorderPane();
         root.setCenter(grid);
-        
+
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+        scene.setOnKeyPressed(this::handleKey);
 
         stage.setTitle("Rescue the Princess");
         stage.setScene(scene);
