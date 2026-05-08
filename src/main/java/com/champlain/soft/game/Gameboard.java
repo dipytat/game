@@ -59,7 +59,14 @@ public class Gameboard extends Application {
         root.setCenter(grid);
 
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-        scene.setOnKeyPressed(this::handleKey);
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case DOWN -> movePlayer(1, 0);
+                case RIGHT -> movePlayer(0, 1);
+                case LEFT -> movePlayer(0, -1);
+                case UP -> movePlayer(-1, 0);
+            }
+        });
 
         stage.setTitle("Rescue the Princess");
         stage.setScene(scene);
