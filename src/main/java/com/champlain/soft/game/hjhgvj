@@ -9,7 +9,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Alert;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -19,10 +18,9 @@ public class Gameboard extends Application {
     private static final int SCENE_WIDTH  = 800;
     private static final int SCENE_HEIGHT = 800;
 
-    // Grid
     private static final int ROWS      = 10;
     private static final int COLS      = 10;
-    private static final int CELL_SIZE = SCENE_WIDTH / COLS; // 80px
+    private static final int CELL_SIZE = SCENE_WIDTH / COLS;
     private static final int NUM_BOMBS = 5;
 
     enum CellType {
@@ -31,11 +29,9 @@ public class Gameboard extends Application {
 
     private CellType[][] matrix = new CellType[ROWS][COLS];
 
-    // Player starts at [1,1]
     private int playerRow = 1;
     private int playerCol = 1;
 
-    // Images
     private Image imgGrass;
     private Image imgWall;
     private Image imgPlayer;
@@ -59,7 +55,14 @@ public class Gameboard extends Application {
         root.setCenter(grid);
 
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-        scene.setOnKeyPressed(this::handleKey);
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case DOWN  -> movePlayer(1, 0);
+                case RIGHT -> movePlayer(0, 1);
+                case LEFT  -> movePlayer(0, -1);
+                case UP    -> movePlayer(-1, 0);
+            }
+        });
 
         stage.setTitle("Rescue the Princess");
         stage.setScene(scene);
@@ -67,10 +70,6 @@ public class Gameboard extends Application {
         stage.show();
     }
 
-
-
-
-    // Load images
     private void loadImages() {
         imgGrass    = new Image(getClass().getResourceAsStream("/images/grass.png"));
         imgWall     = new Image(getClass().getResourceAsStream("/images/wall.png"));
@@ -79,18 +78,14 @@ public class Gameboard extends Application {
         imgBomb     = new Image(getClass().getResourceAsStream("/images/bomb.png"));
     }
 
-
-    // Walls on perimeter, player at [1,1], random princess + bombs
     private void initMatrix() {
 
-        // Fill grass
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
                 matrix[r][c] = CellType.GRASS;
             }
         }
 
-        // Walls
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
                 if (r == 0 || r == ROWS - 1 || c == 0 || c == COLS - 1) {
@@ -99,10 +94,8 @@ public class Gameboard extends Application {
             }
         }
 
-        // Player at [1,1]
         matrix[playerRow][playerCol] = CellType.PLAYER;
 
-        // Princess,bombs randomly
         Random rnd = new Random();
         placeRandom(CellType.PRINCESS, rnd);
         for (int i = 0; i < NUM_BOMBS; i++) {
@@ -119,7 +112,6 @@ public class Gameboard extends Application {
         matrix[r][c] = type;
     }
 
-    //board using images
     private void drawBoard(GridPane grid) {
         grid.getChildren().clear();
 
@@ -135,7 +127,6 @@ public class Gameboard extends Application {
                 Image baseImg = (type == CellType.WALL) ? imgWall : imgGrass;
                 cell.getChildren().add(makeImageView(baseImg));
 
-                // Player, princess, bomb on top of grass
                 if (type == CellType.PLAYER)   cell.getChildren().add(makeImageView(imgPlayer));
                 if (type == CellType.PRINCESS) cell.getChildren().add(makeImageView(imgPrincess));
                 if (type == CellType.BOMB)     cell.getChildren().add(makeImageView(imgBomb));
@@ -153,7 +144,7 @@ public class Gameboard extends Application {
         return iv;
     }
 
- private void movePlayer(int dRow, int dCol){
+    private void movePlayer(int dRow, int dCol) {
         int newRow = playerRow + dRow;
         int newCol = playerCol + dCol;
 
@@ -168,28 +159,28 @@ public class Gameboard extends Application {
 
         drawBoard(grid);
 
-        if(destination == CellType.PRINCESS){
-            showAlert("You saved the princess!!");
-        }else if(destination == CellType.BOMB){
-            showAlert("You hit a bobm, you loose!");
+        if (destination == CellType.PRINCESS) {
+            showAlert("You rescued the princess! You win.");
+        } else if (destination == CellType.BOMB) {
+            showAlert("You hit the bomb. Game over.");
         }
- }
+    }
 
-   private void showAlert(String message){
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Rescue the Princess");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
         resetGame();
-   }
+    }
 
-   private void resetGame(){
+    private void resetGame() {
         playerRow = 1;
         playerCol = 1;
         initMatrix();
         drawBoard(grid);
-   }
+    }
 
     public static void main(String[] args) {
         launch(args);
